@@ -32,5 +32,60 @@ CHIP CPU {
         pc[15];          // Address of next instruction
 
     PARTS:
-    //// Replace this comment with your code.
+    // instruction[] (A-instruction stores instruction value in A. C-instruction does computation)
+    // 15     - i (if 0 then A-instruction else C-instruction)
+    // 13..14 - x (unused)
+    // 12     - a (if 1 then M else A)
+    // 6..11  - c (bits passed directly to ALU for computation configuration)
+    // 3..5   - d
+    // 0..2   - j
+
+    // C-instruction and dest=D
+    And(a=instruction[15], b=instruction[4], out=loadD);
+    DRegister(in=aluOut, load=loadD, out=dOut);
+
+    // A-instruction or (C-instruction and dest=A)
+    And(a=instruction[15], b=instruction[5], out=cLoad);
+    Not(in=instruction[15], out=aInstr);
+    Or(a=cLoad, b=aInstr, out=loadA);
+    ARegister(in=instrOrAlu, load=loadA, out=aOut, out[0..14]=addressM);
+
+    // C-instruction and dest=M);
+    And(a=instruction[15], b=instruction[3], out=writeM);
+
+    // lessThan == ng
+    // equals == zr
+    // greaterThan == not(ng) && not(zr)
+    Not(in=ng, out=gte);
+    Not(in=zr, out=neq);
+    And(a=gte, b=neq, out=gt);
+
+    // J1 satisfied
+    And(a=instruction[2], b=ng, out=j1);
+
+    // J2 satisfied
+    And(a=instruction[1], b=zr, out=j2);
+
+    // J3 satisfied
+    And(a=instruction[0], b=gt, out=j3);
+
+    // If C-instrustionc and any condition ssatisfied then jump
+    Or(a=j1, b=j2, out=j1OrJ2);
+    Or(a=j1OrJ2, b=j3, out=j1OrJ2OrJ3);
+    And(a=instruction[15], b=j1OrJ2OrJ3, out=loadPC);
+
+    // Default to inc if not(loadPC) and not(reset)
+    Not(in=loadPC, out=notLoadPC);
+    Not(in=reset, out=notReset);
+    And(a=notLoadPC, b=notReset, out=inc);
+
+    PC(in=aOut, inc=inc, load=loadPC, reset=reset, out[0..14]=pc);
+
+    ALU(x=dOut, y=aOrM, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=aluOut, out=outM, zr=zr, ng=ng);
+
+    // if 0 then instruction else aluOut
+    Mux16(a=instruction, b=aluOut, sel=instruction[15], out=instrOrAlu);
+
+    // if 0 then A else M
+    Mux16(a=aOut, b=inM, sel=instruction[12], out=aOrM);
 }
