@@ -5,19 +5,43 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Path;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class AssemblerTest {
     @Test
-    void testParse() throws IOException {
-//        Path asmPath = Path.of("../../add/Add.asm");
-//        Path asmPath = Path.of("../../max/Max.asm");
-//        Path asmPath = Path.of("../../rect/Rect.asm");
-        Path asmPath = Path.of("../../pong/Pong.asm");
-        Path hackPath = asmToHackPath(asmPath);
-        Assembler.assemble(asmPath, hackPath);
+    void testPong() {
+        runTest(Path.of("../../pong/Pong.asm"));
     }
 
-    Path asmToHackPath(Path asmPath) {
-        String hackPath = asmPath.getFileName().toString().replace(".asm", "-1.hack");
+    @Test
+    void testAdd() {
+        runTest(Path.of("../../add/Add.asm"));
+    }
+
+    @Test
+    void testMax() {
+        runTest(Path.of("../../max/Max.asm"));
+    }
+    @Test
+    void testRect() {
+        runTest(Path.of("../../rect/Rect.asm"));
+    }
+
+    private void runTest(Path asmPath) {
+        Path comparePath = replaceExtension(asmPath, ".hack");
+        Path outPath = replaceExtension(asmPath, "-1.hack");
+
+        try {
+            Assembler.assemble(asmPath, outPath);
+
+            assertThat(outPath).hasSameTextualContentAs(comparePath);
+        } finally {
+            outPath.toFile().delete();
+        }
+    }
+
+    Path replaceExtension(Path asmPath, String newExtension) {
+        String hackPath = asmPath.getFileName().toString().replace(".asm", newExtension);
         return asmPath.resolveSibling(hackPath);
     }
 }
