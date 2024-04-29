@@ -5,13 +5,13 @@ import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Set;
 
-public record Pop(String segment, int index) implements Command {
+public record Pop(String filename, String segment, int index) implements Command {
 
     @Override
     public List<String> assembly() {
         return ImmutableList.<String>builder()
                 .addAll(popInto("@R13")) // R13 = pop()
-                .addAll(segment.equals("static") ? List.of("@Static." + index, "D=A") : storageAddressInD(segment, segmentToBaseAddress(segment), index))
+                .addAll(segment.equals("static") ? List.of("@" + filename + "." + index, "D=A") : storageAddressInD(segment, segmentToBaseAddress(segment), index))
                 .add("@R14")
                 .add("M=D")  // R14 = base + index
                 .add("@R13")

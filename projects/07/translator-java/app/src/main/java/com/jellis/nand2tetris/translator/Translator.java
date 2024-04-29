@@ -16,9 +16,10 @@ public class Translator {
 
     public static void translate(Path vmPath, Path asmPath) {
         try {
+            String filename = vmPath.getFileName().toString().replace(".vm", "");
             List<String> assembly = Files.readAllLines(vmPath).stream()
                     .filter(l -> !l.startsWith("//") && !l.isEmpty())
-                    .map(Command::parse)
+                    .map(l -> Command.parse(filename, l))
                     .flatMap(c -> c.debugAssembly().stream())
                     .toList();
 

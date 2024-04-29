@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
-public record Push(String segment, int index) implements Command {
+public record Push(String filename, String segment, int index) implements Command {
     @Override
     public List<String> assembly() {
         return ImmutableList.<String>builder()
@@ -27,7 +27,7 @@ public record Push(String segment, int index) implements Command {
                         .add("D=M")       // D = RAM[baseAddress + index]
                         .build();
             }
-            case "static" -> List.of("@Static." + index, "D=M");
+            case "static" -> List.of("@" + filename + "." + index, "D=M");
             case "constant" -> List.of("@" + index, "D=A");
             default -> throw new IllegalStateException("Unexpected value: " + segment);
         };

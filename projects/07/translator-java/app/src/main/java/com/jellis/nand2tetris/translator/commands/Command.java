@@ -18,12 +18,12 @@ public sealed interface Command permits Add, And, Eq, Gt, Lt, Neg, Not, Or, Pop,
                 .build();
     }
 
-    static Command parse(String command) {
+    static Command parse(String filename, String command) {
         List<String> commandAndArgs = Splitter.on(" ").splitToList(command);
 
         return switch (commandAndArgs.get(0)) {
-            case "push" -> new Push(commandAndArgs.get(1), Integer.parseInt(commandAndArgs.get(2)));
-            case "pop"  -> new Pop(commandAndArgs.get(1), Integer.parseInt(commandAndArgs.get(2)));
+            case "push" -> new Push(filename, commandAndArgs.get(1), Integer.parseInt(commandAndArgs.get(2)));
+            case "pop"  -> new Pop(filename, commandAndArgs.get(1), Integer.parseInt(commandAndArgs.get(2)));
             case "add"  -> new Add();
             case "sub"  -> new Sub();
             case "neg"  -> new Neg();

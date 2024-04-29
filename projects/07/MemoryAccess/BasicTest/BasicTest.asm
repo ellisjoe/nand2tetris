@@ -1,4 +1,4 @@
-// Push[segment=constant, index=10]
+// Push[filename=BasicTest.vm, segment=constant, index=10]
 @10
 D=A
 @SP
@@ -6,7 +6,7 @@ A=M
 M=D
 @SP
 M=M+1
-// Pop[segment=local, index=0]
+// Pop[filename=BasicTest.vm, segment=local, index=0]
 @SP
 M=M-1
 A=M
@@ -25,7 +25,7 @@ D=M
 @R14
 A=M
 M=D
-// Push[segment=constant, index=21]
+// Push[filename=BasicTest.vm, segment=constant, index=21]
 @21
 D=A
 @SP
@@ -33,7 +33,7 @@ A=M
 M=D
 @SP
 M=M+1
-// Push[segment=constant, index=22]
+// Push[filename=BasicTest.vm, segment=constant, index=22]
 @22
 D=A
 @SP
@@ -41,7 +41,7 @@ A=M
 M=D
 @SP
 M=M+1
-// Pop[segment=argument, index=2]
+// Pop[filename=BasicTest.vm, segment=argument, index=2]
 @SP
 M=M-1
 A=M
@@ -60,7 +60,7 @@ D=M
 @R14
 A=M
 M=D
-// Pop[segment=argument, index=1]
+// Pop[filename=BasicTest.vm, segment=argument, index=1]
 @SP
 M=M-1
 A=M
@@ -79,7 +79,7 @@ D=M
 @R14
 A=M
 M=D
-// Push[segment=constant, index=36]
+// Push[filename=BasicTest.vm, segment=constant, index=36]
 @36
 D=A
 @SP
@@ -87,7 +87,7 @@ A=M
 M=D
 @SP
 M=M+1
-// Pop[segment=this, index=6]
+// Pop[filename=BasicTest.vm, segment=this, index=6]
 @SP
 M=M-1
 A=M
@@ -106,7 +106,7 @@ D=M
 @R14
 A=M
 M=D
-// Push[segment=constant, index=42]
+// Push[filename=BasicTest.vm, segment=constant, index=42]
 @42
 D=A
 @SP
@@ -114,7 +114,7 @@ A=M
 M=D
 @SP
 M=M+1
-// Push[segment=constant, index=45]
+// Push[filename=BasicTest.vm, segment=constant, index=45]
 @45
 D=A
 @SP
@@ -122,7 +122,7 @@ A=M
 M=D
 @SP
 M=M+1
-// Pop[segment=that, index=5]
+// Pop[filename=BasicTest.vm, segment=that, index=5]
 @SP
 M=M-1
 A=M
@@ -141,7 +141,7 @@ D=M
 @R14
 A=M
 M=D
-// Pop[segment=that, index=2]
+// Pop[filename=BasicTest.vm, segment=that, index=2]
 @SP
 M=M-1
 A=M
@@ -160,7 +160,7 @@ D=M
 @R14
 A=M
 M=D
-// Push[segment=constant, index=510]
+// Push[filename=BasicTest.vm, segment=constant, index=510]
 @510
 D=A
 @SP
@@ -168,7 +168,7 @@ A=M
 M=D
 @SP
 M=M+1
-// Pop[segment=temp, index=6]
+// Pop[filename=BasicTest.vm, segment=temp, index=6]
 @SP
 M=M-1
 A=M
@@ -186,7 +186,7 @@ D=M
 @R14
 A=M
 M=D
-// Push[segment=local, index=0]
+// Push[filename=BasicTest.vm, segment=local, index=0]
 @0
 D=A
 @LCL
@@ -198,7 +198,7 @@ A=M
 M=D
 @SP
 M=M+1
-// Push[segment=that, index=5]
+// Push[filename=BasicTest.vm, segment=that, index=5]
 @5
 D=A
 @THAT
@@ -232,7 +232,7 @@ A=M
 M=D
 @SP
 M=M+1
-// Push[segment=argument, index=1]
+// Push[filename=BasicTest.vm, segment=argument, index=1]
 @1
 D=A
 @ARG
@@ -266,7 +266,7 @@ A=M
 M=D
 @SP
 M=M+1
-// Push[segment=this, index=6]
+// Push[filename=BasicTest.vm, segment=this, index=6]
 @6
 D=A
 @THIS
@@ -278,7 +278,7 @@ A=M
 M=D
 @SP
 M=M+1
-// Push[segment=this, index=6]
+// Push[filename=BasicTest.vm, segment=this, index=6]
 @6
 D=A
 @THIS
@@ -334,7 +334,7 @@ A=M
 M=D
 @SP
 M=M+1
-// Push[segment=temp, index=6]
+// Push[filename=BasicTest.vm, segment=temp, index=6]
 @6
 D=A
 @5
