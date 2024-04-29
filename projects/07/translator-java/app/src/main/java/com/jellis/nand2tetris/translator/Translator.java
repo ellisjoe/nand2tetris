@@ -18,8 +18,10 @@ public class Translator {
         try {
             String filename = vmPath.getFileName().toString().replace(".vm", "");
             List<String> assembly = Files.readAllLines(vmPath).stream()
-                    .filter(l -> !l.startsWith("//") && !l.isEmpty())
-                    .map(l -> Command.parse(filename, l))
+                    .map(Translator::removeComments)
+                    .map(String::trim)
+                    .filter(l -> !l.isEmpty())
+                    .map(l -> Command.parse(filename, "main", l))
                     .flatMap(c -> c.debugAssembly().stream())
                     .toList();
 
@@ -34,5 +36,9 @@ public class Translator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static String removeComments(String line) {
+        return line.replaceAll("//.*", "");
     }
 }
