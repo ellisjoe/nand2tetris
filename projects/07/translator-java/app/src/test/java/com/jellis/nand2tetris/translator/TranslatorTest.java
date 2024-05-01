@@ -29,7 +29,9 @@ class TranslatorTest {
 
     @Test
     void test_08part2() {
-        Path vmPath = Path.of("../../../08/FunctionCalls/FibonacciElement");
+//        Path vmPath = Path.of("../../../08/FunctionCalls/FibonacciElement");
+//        Path vmPath = Path.of("../../../08/FunctionCalls/StaticsTest");
+        Path vmPath = Path.of("../../../08/FunctionCalls/NestedCall");
         Translator.translateFolder(vmPath);
     }
 
