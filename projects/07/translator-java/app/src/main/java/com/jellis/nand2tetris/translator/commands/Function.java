@@ -9,9 +9,13 @@ public record Function(String filename, String functionName, int nVars) implemen
     @Override
     public List<String> assembly() {
         return ImmutableList.<String>builder()
-                .add("(" + filename + "$" + functionName + ")")
+                .add("(" + symbol(filename, functionName) + ")")
                 .add("D=0")
                 .addAll(IntStream.range(0, nVars).boxed().flatMap($ -> pushD().stream()).toList())
                 .build();
+    }
+
+    public static String symbol(String filename, String functionName) {
+        return filename + "$" + functionName;
     }
 }

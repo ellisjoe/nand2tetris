@@ -27,6 +27,12 @@ class TranslatorTest {
         Translator.translate(vmPath, asmPath);
     }
 
+    @Test
+    void test_08part2() {
+        Path vmPath = Path.of("../../../08/FunctionCalls/FibonacciElement");
+        Translator.translateFolder(vmPath);
+    }
+
     Path replaceExtension(Path vmPath, String newExtension) {
         String hackPath = vmPath.getFileName().toString().replace(".vm", newExtension);
         return vmPath.resolveSibling(hackPath);

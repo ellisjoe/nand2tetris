@@ -3,6 +3,8 @@
  */
 package com.jellis.nand2tetris.translator;
 
+import com.google.common.collect.ImmutableList;
+import com.jellis.nand2tetris.translator.commands.Call;
 import com.jellis.nand2tetris.translator.commands.Command;
 import com.jellis.nand2tetris.translator.commands.Function;
 
@@ -16,12 +18,63 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Translator {
     private Translator() {}
 
-    public static void translate(Path vmPath, Path asmPath) {
-        AtomicReference<String> currentFunction = new AtomicReference<>("default");
-
+    public static void translateFolder(Path vmFolder) {
+        String asmFile = vmFolder.getFileName().toString() + ".asm";
+        Path asmPath = vmFolder.resolve(asmFile);
         try {
-            String filename = vmPath.getFileName().toString().replace(".vm", "");
-            List<String> assembly = Files.readAllLines(vmPath).stream()
+            List<String> assembly = Files.list(vmFolder)
+                    .filter(f -> f.toString().endsWith(".vm"))
+                    .flatMap(f -> translateFile(f).stream())
+                    .toList();
+            writeAsm(assembly, asmPath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void translate(Path vmPath, Path asmPath) {
+        List<String> assembly = translateFile(vmPath);
+        writeAsm(assembly, asmPath);
+    }
+
+    private static void writeAsm(List<String> assembly, Path asmPath) {
+        ImmutableList<String> bootstrap = ImmutableList.<String>builder()
+                .addAll(initVar("@SP", 256))
+                .addAll(initVar("@THIS", 3000))
+                .addAll(initVar("@THAT", 4000))
+                // call Sys.init
+                .addAll(new Call("Sys", "init", "Sys.init", 0).assembly())
+//                .add("@Sys$Sys.init")
+//                .add("0;JMP")
+                .build();
+        try (BufferedWriter writer = Files.newBufferedWriter(asmPath)) {
+            for (String b : bootstrap) {
+                writer.write(b);
+                writer.write("\n");
+            }
+            for (String b : assembly) {
+                writer.write(b);
+                writer.write("\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static List<String> initVar(String var, int value) {
+        return ImmutableList.<String>builder()
+                .add("@" + value)
+                .add("D=A")
+                .add(var)
+                .add("M=D")
+                .build();
+    }
+
+    private static List<String> translateFile(Path vmPath) {
+        AtomicReference<String> currentFunction = new AtomicReference<>("default");
+        String filename = vmPath.getFileName().toString().replace(".vm", "");
+        try {
+            return Files.readAllLines(vmPath).stream()
                     .map(Translator::removeComments)
                     .map(String::trim)
                     .filter(l -> !l.isEmpty())
@@ -35,15 +88,6 @@ public class Translator {
                     })
                     .flatMap(c -> c.debugAssembly().stream())
                     .toList();
-
-            try (BufferedWriter writer = Files.newBufferedWriter(asmPath)) {
-                for (String b : assembly) {
-                    writer.write(b);
-                    writer.write("\n");
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

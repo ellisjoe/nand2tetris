@@ -38,6 +38,7 @@ public sealed interface Command permits Add, And, Call, Eq, Function, GoTo, Gt, 
             case "goto"     -> new GoTo(filename, functionName, commandAndArgs.get(1));
             case "function" -> new Function(filename, commandAndArgs.get(1), Integer.parseInt(commandAndArgs.get(2)));
             case "return"   -> new Return();
+            case "call"     -> new Call(filename, functionName, commandAndArgs.get(1), Integer.parseInt(commandAndArgs.get(2)));
             default -> throw new IllegalArgumentException("Unknown command: " + commandAndArgs.get(0));
         };
     }
