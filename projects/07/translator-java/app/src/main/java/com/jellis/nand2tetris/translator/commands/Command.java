@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableList;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public sealed interface Command permits Add, And, Eq, GoTo, Gt, IfGoTo, Label, Lt, Neg, Not, Or, Pop, Push, Sub {
+public sealed interface Command permits Add, And, Call, Eq, Function, GoTo, Gt, IfGoTo, Label, Lt, Neg, Not, Or, Pop, Push, Return, Sub {
     Set<String> NO_LOOKUP = Set.of("pointer", "temp");
 
     List<String> assembly();
@@ -22,20 +22,22 @@ public sealed interface Command permits Add, And, Eq, GoTo, Gt, IfGoTo, Label, L
         List<String> commandAndArgs = Splitter.on(" ").splitToList(command);
 
         return switch (commandAndArgs.get(0)) {
-            case "push"    -> new Push(filename, commandAndArgs.get(1), Integer.parseInt(commandAndArgs.get(2)));
-            case "pop"     -> new Pop(filename, commandAndArgs.get(1), Integer.parseInt(commandAndArgs.get(2)));
-            case "add"     -> new Add();
-            case "sub"     -> new Sub();
-            case "neg"     -> new Neg();
-            case "eq"      -> new Eq();
-            case "gt"      -> new Gt();
-            case "lt"      -> new Lt();
-            case "and"     -> new And();
-            case "or"      -> new Or();
-            case "not"     -> new Not();
-            case "label"   -> new Label(filename, functionName, commandAndArgs.get(1));
-            case "if-goto" -> new IfGoTo(filename, functionName, commandAndArgs.get(1));
-            case "goto"    -> new GoTo(filename, functionName, commandAndArgs.get(1));
+            case "push"     -> new Push(filename, commandAndArgs.get(1), Integer.parseInt(commandAndArgs.get(2)));
+            case "pop"      -> new Pop(filename, commandAndArgs.get(1), Integer.parseInt(commandAndArgs.get(2)));
+            case "add"      -> new Add();
+            case "sub"      -> new Sub();
+            case "neg"      -> new Neg();
+            case "eq"       -> new Eq();
+            case "gt"       -> new Gt();
+            case "lt"       -> new Lt();
+            case "and"      -> new And();
+            case "or"       -> new Or();
+            case "not"      -> new Not();
+            case "label"    -> new Label(filename, functionName, commandAndArgs.get(1));
+            case "if-goto"  -> new IfGoTo(filename, functionName, commandAndArgs.get(1));
+            case "goto"     -> new GoTo(filename, functionName, commandAndArgs.get(1));
+            case "function" -> new Function(filename, commandAndArgs.get(1), Integer.parseInt(commandAndArgs.get(2)));
+            case "return"   -> new Return();
             default -> throw new IllegalArgumentException("Unknown command: " + commandAndArgs.get(0));
         };
     }

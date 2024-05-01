@@ -21,7 +21,8 @@ class TranslatorTest {
     @Test
     void test_08() {
 //        Path vmPath = Path.of("../../../08/ProgramFlow/BasicLoop/BasicLoop.vm");
-        Path vmPath = Path.of("../../../08/ProgramFlow/FibonacciSeries/FibonacciSeries.vm");
+//        Path vmPath = Path.of("../../../08/ProgramFlow/FibonacciSeries/FibonacciSeries.vm");
+        Path vmPath = Path.of("../../../08/FunctionCalls/SimpleFunction/SimpleFunction.vm");
         Path asmPath = replaceExtension(vmPath, ".asm");
         Translator.translate(vmPath, asmPath);
     }

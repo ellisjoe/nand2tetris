@@ -4,24 +4,35 @@
 package com.jellis.nand2tetris.translator;
 
 import com.jellis.nand2tetris.translator.commands.Command;
+import com.jellis.nand2tetris.translator.commands.Function;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Translator {
     private Translator() {}
 
     public static void translate(Path vmPath, Path asmPath) {
+        AtomicReference<String> currentFunction = new AtomicReference<>("default");
+
         try {
             String filename = vmPath.getFileName().toString().replace(".vm", "");
             List<String> assembly = Files.readAllLines(vmPath).stream()
                     .map(Translator::removeComments)
                     .map(String::trim)
                     .filter(l -> !l.isEmpty())
-                    .map(l -> Command.parse(filename, "main", l))
+                    .map(l -> {
+                        Command command = Command.parse(filename, currentFunction.get(), l);
+                        switch (command) {
+                            case Function f -> currentFunction.set(f.functionName());
+                            default -> {}
+                        }
+                        return command;
+                    })
                     .flatMap(c -> c.debugAssembly().stream())
                     .toList();
 
