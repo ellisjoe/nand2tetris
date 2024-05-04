@@ -1,0 +1,50 @@
+class Main {
+    static String newline;
+
+    function void main() {
+        var String input;
+        var boolean exit;
+
+        let newline = String.new(1);
+        do newline.appendChar(String.newLine());
+        let exit = false;
+
+        while (~exit) {
+            let input = Keyboard.readLine("Message: ");
+
+            if (Main.stringsEqual(input, "EXIT")) {
+                let exit = true;
+            } else {
+                do Output.printString("Your message was: ");
+                do Output.printString(input);
+                do Output.printString(newline);
+            }
+        }
+
+        do Output.printString("Exiting...");
+
+        return;
+    }
+
+    function boolean stringsEqual(String a, String b) {
+        var int index, length;
+        var boolean same;
+
+        let index = 0;
+        let length = a.length();
+        let same = true;
+
+        if (~(a.length() = b.length())) {
+            return false;
+        }
+
+        while (index < length) {
+            if (~(a.charAt(index) = b.charAt(index))) {
+                return false;
+            }
+            let index = index + 1;
+        }
+
+        return true;
+    }
+}
